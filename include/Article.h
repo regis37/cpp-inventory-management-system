@@ -19,6 +19,9 @@ class Article {
       std::string getName() const;
       double getPrice() const;
       std::string toString() const;
+
+    void setName(const std::string& name);
+    void setPrice(double price);
 };
 
 #endif

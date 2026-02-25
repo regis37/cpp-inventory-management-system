@@ -20,6 +20,9 @@ public:
     int addArticle(Article& article);
     Article& getArticle(int id);
     std::string toString() const;
+    void deleteArticle(int id);
+    void updateArticle(int id, const std::string& name, double price);
+    bool containsArticle(int id) const;
 };
 
 #endif

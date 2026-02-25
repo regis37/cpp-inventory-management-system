@@ -19,6 +19,10 @@ std::string Article::getName() const {
 double Article::getPrice() const {
     return price;
 }
+// Setters
+void Article::setName(const std::string& name) { this->name = name; }
+
+void Article::setPrice(double price) { this->price = price; }
 
 /*
  -Creates formatted string:

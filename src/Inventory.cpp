@@ -32,3 +32,28 @@ std::string Inventory::toString() const {
 
     return stream.str();
 }
+
+/*
+ * Deletes article corresponding to the id from inventory
+ */
+void Inventory::deleteArticle(int id) {
+  articles.erase(id);
+}
+
+/*
+ * Update article corresponding to the id from inventory
+ * with new name and price
+ */
+void Inventory::updateArticle(int id, const std::string& name, double price) {
+    if (articles.count(id)) {
+        articles[id]->setName(name);
+        articles[id]->setPrice(price);
+    }
+}
+
+/*
+ * Check if an article is present in the inventory
+ */
+bool Inventory::containsArticle(int id) const {
+  return articles.count(id);
+}
