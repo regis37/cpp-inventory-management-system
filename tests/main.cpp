@@ -1,6 +1,7 @@
 #include "Inventory.h"
 #include <iostream>
 #include <limits>
+#include <vector>
 
 void displayMenu() {
     std::cout << "\n=== Inventory Management ===" << std::endl;
@@ -8,6 +9,7 @@ void displayMenu() {
     std::cout << "2. Add an article"            << std::endl;
     std::cout << "3. Update an article"         << std::endl;
     std::cout << "4. Delete an article"         << std::endl;
+    std::cout << "5. Search by name"            << std::endl;
     std::cout << "0. Exit"                      << std::endl;
     std::cout << "Choice: ";
 }
@@ -80,6 +82,25 @@ void deleteArticle(Inventory& inventory) {
     std::cout << "Article deleted successfully." << std::endl;
 }
 
+void searchByName(Inventory& inventory) {
+    std::string search;
+
+    std::cout << "Search name: ";
+    std::getline(std::cin, search);
+
+    std::vector<Article*> results = inventory.searchByName(search);
+
+    if (results.empty()) {
+        std::cout << "No articles found." << std::endl;
+        return;
+    }
+
+    std::cout << "\nFound " << results.size() << " article(s):\n";
+    for (const auto& article : results) {
+        std::cout << article->toString() << std::endl;
+    }
+}
+
 int main() {
     Inventory inventory;
     int choice;
@@ -94,6 +115,7 @@ int main() {
             case 2: addArticle(inventory);      break;
             case 3: updateArticle(inventory);   break;
             case 4: deleteArticle(inventory);   break;
+            case 5: searchByName(inventory);    break;
             case 0: std::cout << "Goodbye!" << std::endl; break;
             default: std::cout << "Invalid choice." << std::endl;
         }

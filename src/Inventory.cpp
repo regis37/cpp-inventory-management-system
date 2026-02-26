@@ -1,5 +1,6 @@
 #include "Inventory.h"
 #include <sstream>
+#include <algorithm>
 
 /*
  * Registers an article inside the inventory.
@@ -56,4 +57,25 @@ void Inventory::updateArticle(int id, const std::string& name, double price) {
  */
 bool Inventory::containsArticle(int id) const {
   return articles.count(id);
+}
+
+/*
+ * Search articles by name (case-insensitive, partial match)
+ */
+std::vector<Article*> Inventory::searchByName(const std::string& search) const {
+    std::vector<Article*> results;
+
+    std::string searchLower = search;
+    std::transform(searchLower.begin(), searchLower.end(), searchLower.begin(), ::tolower);
+
+    for (const auto& pair : articles) {
+        std::string nameLower = pair.second->getName();
+        std::transform(nameLower.begin(), nameLower.end(), nameLower.begin(), ::tolower);
+
+        if (nameLower.find(searchLower) != std::string::npos) {
+            results.push_back(pair.second);
+        }
+    }
+
+    return results;
 }
