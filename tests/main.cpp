@@ -1,69 +1,103 @@
 #include "Inventory.h"
 #include <iostream>
-#include <cassert>
+#include <limits>
 
-void testAddArticle() {
-    Inventory inventory;
-    Article gum(483, "Chewing Gum", 0.20);
-    inventory.addArticle(gum);
-
-    assert(inventory.containsArticle(483));
-    std::cout << "[PASS] testAddArticle" << std::endl;
+void displayMenu() {
+    std::cout << "\n=== Inventory Management ===" << std::endl;
+    std::cout << "1. Display all articles"      << std::endl;
+    std::cout << "2. Add an article"            << std::endl;
+    std::cout << "3. Update an article"         << std::endl;
+    std::cout << "4. Delete an article"         << std::endl;
+    std::cout << "0. Exit"                      << std::endl;
+    std::cout << "Choice: ";
 }
 
-void testGetArticle() {
-    Inventory inventory;
-    Article gum(483, "Chewing Gum", 0.20);
-    inventory.addArticle(gum);
-
-    Article& found = inventory.getArticle(483);
-    assert(found.getId() == 483);
-    assert(found.getName() == "Chewing Gum");
-    assert(found.getPrice() == 0.20);
-    std::cout << "[PASS] testGetArticle" << std::endl;
+void displayAll(Inventory& inventory) {
+    std::cout << "\n" << inventory.toString();
 }
 
-void testDeleteArticle() {
-    Inventory inventory;
-    Article gum(483, "Chewing Gum", 0.20);
-    inventory.addArticle(gum);
-    inventory.deleteArticle(483);
+void addArticle(Inventory& inventory) {
+    int id;
+    std::string name;
+    double price;
 
-    assert(!inventory.containsArticle(483));
-    std::cout << "[PASS] testDeleteArticle" << std::endl;
+    std::cout << "ID: ";
+    std::cin >> id;
+    std::cin.ignore();
+
+    std::cout << "Name: ";
+    std::getline(std::cin, name);
+
+    std::cout << "Price: ";
+    std::cin >> price;
+
+    if (inventory.containsArticle(id)) {
+        std::cout << "Error: ID " << id << " already exists." << std::endl;
+        return;
+    }
+
+    Article* article = new Article(id, name, price);
+    inventory.addArticle(*article);
+    std::cout << "Article added successfully." << std::endl;
 }
 
-void testUpdateArticle() {
-    Inventory inventory;
-    Article gum(483, "Chewing Gum", 0.20);
-    inventory.addArticle(gum);
-    inventory.updateArticle(483, "Bubble Gum", 0.35);
+void updateArticle(Inventory& inventory) {
+    int id;
+    std::string name;
+    double price;
 
-    Article& updated = inventory.getArticle(483);
-    assert(updated.getName() == "Bubble Gum");
-    assert(updated.getPrice() == 0.35);
-    std::cout << "[PASS] testUpdateArticle" << std::endl;
+    std::cout << "ID to update: ";
+    std::cin >> id;
+    std::cin.ignore();
+
+    if (!inventory.containsArticle(id)) {
+        std::cout << "Error: ID " << id << " not found." << std::endl;
+        return;
+    }
+
+    std::cout << "New name: ";
+    std::getline(std::cin, name);
+
+    std::cout << "New price: ";
+    std::cin >> price;
+
+    inventory.updateArticle(id, name, price);
+    std::cout << "Article updated successfully." << std::endl;
 }
 
-void testContainsArticle() {
-    Inventory inventory;
-    Article gum(483, "Chewing Gum", 0.20);
-    inventory.addArticle(gum);
+void deleteArticle(Inventory& inventory) {
+    int id;
 
-    assert(inventory.containsArticle(483));
-    assert(!inventory.containsArticle(999));
-    std::cout << "[PASS] testContainsArticle" << std::endl;
+    std::cout << "ID to delete: ";
+    std::cin >> id;
+
+    if (!inventory.containsArticle(id)) {
+        std::cout << "Error: ID " << id << " not found." << std::endl;
+        return;
+    }
+
+    inventory.deleteArticle(id);
+    std::cout << "Article deleted successfully." << std::endl;
 }
 
 int main() {
-    std::cout << "Running tests...\n" << std::endl;
+    Inventory inventory;
+    int choice;
 
-    testAddArticle();
-    testGetArticle();
-    testDeleteArticle();
-    testUpdateArticle();
-    testContainsArticle();
+    do {
+        displayMenu();
+        std::cin >> choice;
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-    std::cout << "\nAll tests passed!" << std::endl;
+        switch (choice) {
+            case 1: displayAll(inventory);      break;
+            case 2: addArticle(inventory);      break;
+            case 3: updateArticle(inventory);   break;
+            case 4: deleteArticle(inventory);   break;
+            case 0: std::cout << "Goodbye!" << std::endl; break;
+            default: std::cout << "Invalid choice." << std::endl;
+        }
+    } while (choice != 0);
+
     return 0;
 }

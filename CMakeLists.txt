@@ -11,3 +11,12 @@ add_executable(inventory
         src/Inventory.cpp
         tests/main.cpp
 )
+
+add_executable(tests
+        src/Article.cpp
+        src/Inventory.cpp
+        tests/tests.cpp
+)
+
+target_include_directories(inventory PRIVATE include)
+target_include_directories(tests PRIVATE include)
