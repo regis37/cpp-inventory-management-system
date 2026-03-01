@@ -1,6 +1,9 @@
 #include "Inventory.h"
+#include <iostream>
 #include <sstream>
 #include <algorithm>
+#include <fstream>
+#include <sstream>
 
 /*
  * Registers an article inside the inventory.
@@ -78,4 +81,49 @@ std::vector<Article*> Inventory::searchByName(const std::string& search) const {
     }
 
     return results;
+}
+
+void Inventory::saveToFile(const std::string& filename) const {
+    std::ofstream file(filename);
+
+    file << "id,name,price\n";
+
+    for (const auto& pair : articles) {
+        file << pair.second->getId()   << ","
+             << pair.second->getName() << ","
+             << pair.second->getPrice()<< "\n";
+    }
+
+    file.close();
+    std::cout << "Inventory saved to " << filename << std::endl;
+}
+
+void Inventory::loadFromFile(const std::string& filename) {
+    std::ifstream file(filename);
+
+    if (!file.is_open()) {
+        std::cout << "No save file found, starting fresh." << std::endl;
+        return;
+    }
+
+    std::string line;
+    std::getline(file, line); // Skip header line
+
+    while (std::getline(file, line)) {
+        std::stringstream ss(line);
+        std::string idStr, name, priceStr;
+
+        std::getline(ss, idStr,   ',');
+        std::getline(ss, name,    ',');
+        std::getline(ss, priceStr,',');
+
+        int id       = std::stoi(idStr);
+        double price = std::stod(priceStr);
+
+        Article* article = new Article(id, name, price);
+        articles[id] = article;
+    }
+
+    file.close();
+    std::cout << "Inventory loaded from " << filename << std::endl;
 }

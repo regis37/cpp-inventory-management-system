@@ -105,10 +105,13 @@ int main() {
     Inventory inventory;
     int choice;
 
+    inventory.loadFromFile("inventory.csv");
+
     do {
         displayMenu();
         std::cin >> choice;
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
 
         switch (choice) {
             case 1: displayAll(inventory);      break;
@@ -116,7 +119,9 @@ int main() {
             case 3: updateArticle(inventory);   break;
             case 4: deleteArticle(inventory);   break;
             case 5: searchByName(inventory);    break;
-            case 0: std::cout << "Goodbye!" << std::endl; break;
+            case 0:
+              inventory.saveToFile("inventory.csv");
+              std::cout << "Goodbye!" << std::endl; break;
             default: std::cout << "Invalid choice." << std::endl;
         }
     } while (choice != 0);

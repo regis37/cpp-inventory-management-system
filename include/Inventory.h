@@ -5,6 +5,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <fstream>
 
 /*
  * Inventory class managing articles.
@@ -25,6 +26,8 @@ public:
     void updateArticle(int id, const std::string& name, double price);
     bool containsArticle(int id) const;
     std::vector<Article*> searchByName(const std::string& search) const;
+    void saveToFile(const std::string& filename) const;
+    void loadFromFile(const std::string& filename);
 };
 
 #endif
