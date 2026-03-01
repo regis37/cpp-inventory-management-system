@@ -4,6 +4,7 @@
 #include "Article.h"
 #include <map>
 #include <string>
+#include <vector>
 
 /*
  * Inventory class managing articles.
@@ -23,6 +24,7 @@ public:
     void deleteArticle(int id);
     void updateArticle(int id, const std::string& name, double price);
     bool containsArticle(int id) const;
+    std::vector<Article*> searchByName(const std::string& search) const;
 };
 
 #endif

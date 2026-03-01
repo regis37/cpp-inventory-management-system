@@ -55,6 +55,38 @@ void testContainsArticle() {
     std::cout << "[PASS] testContainsArticle" << std::endl;
 }
 
+void testSearchByName() {
+    Inventory inventory;
+    Article gum(483, "Chewing Gum", 0.20);
+    Article candy(484, "Candy Bar", 1.50);
+    Article soda(485, "Soda Can", 0.99);
+    inventory.addArticle(gum);
+    inventory.addArticle(candy);
+    inventory.addArticle(soda);
+
+    // Partial match
+    auto results = inventory.searchByName("Gum");
+    assert(results.size() == 1);
+    assert(results[0]->getId() == 483);
+
+    // Case insensitive
+    results = inventory.searchByName("CANDY");
+    assert(results.size() == 1);
+    assert(results[0]->getId() == 484);
+
+    // No match
+    results = inventory.searchByName("Pizza");
+    assert(results.empty());
+
+    // Multiple matches
+    Article gumball(486, "Gumball", 0.10);
+    inventory.addArticle(gumball);
+    results = inventory.searchByName("gum");
+    assert(results.size() == 2);
+
+    std::cout << "[PASS] testSearchByName" << std::endl;
+}
+
 int main() {
     std::cout << "Running tests...\n" << std::endl;
 
@@ -63,6 +95,7 @@ int main() {
     testDeleteArticle();
     testUpdateArticle();
     testContainsArticle();
+    testSearchByName();
 
     std::cout << "\nAll tests passed!" << std::endl;
     return 0;
