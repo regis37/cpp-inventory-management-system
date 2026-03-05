@@ -2,6 +2,7 @@
 #include <iostream>
 #include <limits>
 #include <vector>
+#include "Database.h"
 
 void displayMenu() {
     std::cout << "\n=== Inventory Management ===" << std::endl;
@@ -104,8 +105,11 @@ void searchByName(Inventory& inventory) {
 int main() {
     Inventory inventory;
     int choice;
+    Database db("inventory.db");
+    db.createTable();
 
-    inventory.loadFromFile("inventory.csv");
+    //inventory.loadFromFile("inventory.csv");
+    db.load(inventory.getArticles());
 
     do {
         displayMenu();
@@ -120,7 +124,8 @@ int main() {
             case 4: deleteArticle(inventory);   break;
             case 5: searchByName(inventory);    break;
             case 0:
-              inventory.saveToFile("inventory.csv");
+              //inventory.saveToFile("inventory.csv");
+              db.save(inventory.getArticles());
               std::cout << "Goodbye!" << std::endl; break;
             default: std::cout << "Invalid choice." << std::endl;
         }

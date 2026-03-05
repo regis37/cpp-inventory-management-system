@@ -127,3 +127,12 @@ void Inventory::loadFromFile(const std::string& filename) {
     file.close();
     std::cout << "Inventory loaded from " << filename << std::endl;
 }
+
+
+const std::map<int, Article*>& Inventory::getArticles() const{
+  return articles;
+  }
+
+std::map<int, Article*>& Inventory::getArticles() {
+    return articles;
+}
