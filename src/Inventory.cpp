@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <fstream>
 #include <sstream>
+#include "Exceptions.h"
 
 /*
  * Registers an article inside the inventory.
@@ -41,7 +42,10 @@ std::string Inventory::toString() const {
  * Deletes article corresponding to the id from inventory
  */
 void Inventory::deleteArticle(int id) {
-  articles.erase(id);
+  if (!articles.count(id)) {
+        throw ArticleNotFoundException("Article with ID " + std::to_string(id) + " not found.");
+    }
+    articles.erase(id);
 }
 
 /*
@@ -49,11 +53,19 @@ void Inventory::deleteArticle(int id) {
  * with new name and price
  */
 void Inventory::updateArticle(int id, const std::string& name, double price) {
-    if (articles.count(id)) {
-        articles[id]->setName(name);
-        articles[id]->setPrice(price);
+  if (!articles.count(id)) {
+        throw ArticleNotFoundException("Article with ID " + std::to_string(id) + " not found.");
     }
+    if (name.empty()) {
+        throw InvalidNameException("Name cannot be empty.");
+    }
+    if (price < 0) {
+        throw InvalidPriceException("Price cannot be negative.");
+    }
+    articles[id]->setName(name);
+    articles[id]->setPrice(price);
 }
+
 
 /*
  * Check if an article is present in the inventory

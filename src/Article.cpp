@@ -1,11 +1,16 @@
 #include "Article.h"
+#include "Exceptions.h"
 #include <sstream>
 #include <iomanip>
 
 
 // Constructor
 Article::Article(int id, const std::string& name, double price)
-    : id(id), name(name), price(price) {}
+    : id(id), name(name), price(price) {
+    if (id <= 0)      throw InvalidIdException("ID cannot be negative or zero");
+    if (price < 0)    throw InvalidPriceException("Price cannot be negative");
+    if (name.empty()) throw InvalidNameException("Name cannot be empty");
+    }
 
 // Getters
 int Article::getId() const {

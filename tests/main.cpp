@@ -3,6 +3,7 @@
 #include <limits>
 #include <vector>
 #include "Database.h"
+#include "Exceptions.h"
 
 void displayMenu() {
     std::cout << "\n=== Inventory Management ===" << std::endl;
@@ -39,9 +40,17 @@ void addArticle(Inventory& inventory) {
         return;
     }
 
-    Article* article = new Article(id, name, price);
-    inventory.addArticle(*article);
-    std::cout << "Article added successfully." << std::endl;
+    try {
+        Article* article = new Article(id, name, price);
+        inventory.addArticle(*article);
+        std::cout << "Article added successfully." << std::endl;
+    } catch (const InvalidPriceException& e) {
+        std::cout << "Error: " << e.what() << std::endl;
+    } catch (const InvalidNameException& e) {
+        std::cout << "Error: " << e.what() << std::endl;
+    } catch (const InvalidIdException& e) {
+        std::cout << "Error: " << e.what() << std::endl;
+    }
 }
 
 void updateArticle(Inventory& inventory) {
@@ -64,8 +73,15 @@ void updateArticle(Inventory& inventory) {
     std::cout << "New price: ";
     std::cin >> price;
 
-    inventory.updateArticle(id, name, price);
-    std::cout << "Article updated successfully." << std::endl;
+    try{
+      inventory.updateArticle(id, name, price);
+      std::cout << "Article updated successfully." << std::endl;
+    }catch (const InvalidNameException& e) {
+      std::cout << "Error: " << e.what() << std::endl;
+    }
+    catch (const InvalidPriceException& e) {
+      std::cout << "Error: " << e.what() << std::endl;
+    }
 }
 
 void deleteArticle(Inventory& inventory) {
@@ -79,8 +95,12 @@ void deleteArticle(Inventory& inventory) {
         return;
     }
 
-    inventory.deleteArticle(id);
-    std::cout << "Article deleted successfully." << std::endl;
+    try{
+        inventory.deleteArticle(id);
+        std::cout << "Article deleted successfully." << std::endl;
+    } catch (const InvalidIdException& e) {
+      std::cout << "Error: " << e.what() << std::endl;
+    }
 }
 
 void searchByName(Inventory& inventory) {
