@@ -1,6 +1,7 @@
 #include "Inventory.h"
 #include <iostream>
 #include <cassert>
+#include "Exceptions.h"
 
 void testAddArticle() {
     Inventory inventory;
@@ -87,6 +88,61 @@ void testSearchByName() {
     std::cout << "[PASS] testSearchByName" << std::endl;
 }
 
+void testInvalidPrice() {
+    bool exceptionThrown = false;
+    try {
+        Article article(1, "Test", -5.0);
+    } catch (const InvalidPriceException& e) {
+        exceptionThrown = true;
+    }
+    assert(exceptionThrown);
+    std::cout << "[PASS] testInvalidPrice" << std::endl;
+}
+
+void testInvalidName() {
+    bool exceptionThrown = false;
+    try {
+        Article article(1, "", 1.0);
+    } catch (const InvalidNameException& e) {
+        exceptionThrown = true;
+    }
+    assert(exceptionThrown);
+    std::cout << "[PASS] testInvalidName" << std::endl;
+}
+
+void testInvalidId() {
+    bool exceptionThrown = false;
+    try {
+        Article article(-1, "Test", 5.0);
+    } catch (const InvalidIdException& e) {
+        exceptionThrown = true;
+    }
+    assert(exceptionThrown);
+    std::cout << "[PASS] testInvalidId" << std::endl;
+}
+
+void testArticleNotFound() {
+    Inventory inventory;
+
+    bool exceptionThrown = false;
+    try {
+        inventory.updateArticle(999, "Test", 1.0);
+    } catch (const ArticleNotFoundException& e) {
+        exceptionThrown = true;
+    }
+    assert(exceptionThrown);
+
+    exceptionThrown = false;
+    try {
+        inventory.deleteArticle(999);
+    } catch (const ArticleNotFoundException& e) {
+        exceptionThrown = true;
+    }
+    assert(exceptionThrown);
+
+    std::cout << "[PASS] testArticleNotFound" << std::endl;
+}
+
 int main() {
     std::cout << "Running tests...\n" << std::endl;
 
@@ -96,6 +152,10 @@ int main() {
     testUpdateArticle();
     testContainsArticle();
     testSearchByName();
+    testInvalidPrice();
+    testInvalidName();
+    testInvalidId();
+    testArticleNotFound();
 
     std::cout << "\nAll tests passed!" << std::endl;
     return 0;
