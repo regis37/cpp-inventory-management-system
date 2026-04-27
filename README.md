@@ -1,4 +1,8 @@
 # C++ Inventory Management System
+![C++](https://img.shields.io/badge/C++-17-blue.svg)
+![CMake](https://img.shields.io/badge/CMake-3.15+-green.svg)
+![SQLite](https://img.shields.io/badge/SQLite-3-blue.svg)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
 
 ## Overview
 This project implements a complete inventory management system in C++.
